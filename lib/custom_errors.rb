@@ -1,4 +1,7 @@
+require_relative './error.rb'
+
 class Person
+  include Errors
   attr_accessor :partner, :name
 
   def initialize(name)
@@ -6,8 +9,16 @@ class Person
   end
 
   def get_married(person)
-    self.partner = person
-    person.partner = self
+    #self.partner = person
+    if person.class != self.class
+      begin
+        raise PartnerError
+      rescue PartnerError => the_error
+        puts the_error.message
+      end
+    else
+      person.partner = self
+    end
   end
 
 end
@@ -15,7 +26,6 @@ end
 beyonce = Person.new("Beyonce")
 beyonce.get_married("Jay-Z")
 puts beyonce.name
-
 
 
 
